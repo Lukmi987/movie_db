@@ -86,10 +86,23 @@ function isAdmin(){
   }
   try{
     $isAdmin = decodeJwt('is_admin');
-  }catch((\Exception $e){
+  }catch(\Exception $e){
     return false;
   }
-return (boolean)$isAdmin; // we want to make se it's eaither true or false. So, let's set it as a Boolean, just to be sure 
+return (boolean)$isAdmin; // we want to make se it's eaither true or false. So, let's set it as a Boolean, just to be sure
+}
+
+function isOwner($MovieOwnerId){//we can get the owner of the movie from Db and pass it to this func to verify that the authenticated user is the actual owner
+  if(!isAuthenticated()){
+    return false;
+  }
+  try{
+  $user = decodeJwt('sub');
+  }{ catch(\Exception $e)
+    return false;
+  }
+
+  return $MovieOwnerId == $userId;
 }
 
 function display_errors() {
