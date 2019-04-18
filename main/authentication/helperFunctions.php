@@ -65,7 +65,7 @@ function requireAdmin(){ // add to the top of the every page where we require Ad
 if(!isAuthenticated()){
   $accessToken = new Symfony\Component\HttpFoundation\Cookie('access_token', 'Expired', time()-3600,'/',
   getenv('COOKIE_DOMAIN')); //before we redirect we should set a new cookie  with the same name that expires in the past with an invalid jwt
-  redirect('authentication/login.php',['cookies' => [$accessToken]]); 
+  redirect('authentication/login.php',['cookies' => [$accessToken]]);
   }
 
   try{
@@ -78,6 +78,18 @@ if(!isAuthenticated()){
     getenv('COOKIE_DOMAIN'));
     redirect('authentication/login.php',['cookies' => [$accessToken]]);
   }
+}
+
+function isAdmin(){
+  if(!isAuthenticated()){
+    return false;
+  }
+  try{
+    $isAdmin = decodeJwt('is_admin');
+  }catch((\Exception $e){
+    return false;
+  }
+return (boolean)$isAdmin; // we want to make se it's eaither true or false. So, let's set it as a Boolean, just to be sure 
 }
 
 function display_errors() {
