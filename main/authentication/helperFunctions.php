@@ -61,6 +61,25 @@ function requireAuth(){ //use it at the top of any file where you require authen
   }
 }
 
+function requireAdmin(){ // add to the top of the every page where we require Admin rights
+if(!isAuthenticated()){
+  $accessToken = new Symfony\Component\HttpFoundation\Cookie('access_token', 'Expired', time()-3600,'/',
+  getenv('COOKIE_DOMAIN')); //before we redirect we should set a new cookie  with the same name that expires in the past with an invalid jwt
+  redirect('authentication/login.php',['cookies' => [$accessToken]]); 
+  }
+
+  try{
+    if(! decodeJwt('is_admin')){
+      $session->getFlashBag()->add('error', 'Not Authorized');
+      redirect('../showMovies.php');
+    }
+  } catch (\Exception $e){//If there's any problem reading from the cookie or the JWT we can clear the user and have them log back in
+    $accessToken = new Symfony\Component\HttpFoundation\Cookie('access_token', 'Expired', time()-3600,'/',
+    getenv('COOKIE_DOMAIN'));
+    redirect('authentication/login.php',['cookies' => [$accessToken]]);
+  }
+}
+
 function display_errors() {
   global $session;
 
