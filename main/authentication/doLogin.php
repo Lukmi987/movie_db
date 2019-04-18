@@ -7,6 +7,7 @@ $query = new queryToDatabase();
 $user = $query->findUserByEmail(request()->get('email'));
 
 if(empty($user)){ //from the session object in requireFiles.ph we get the FlashBag and can add to it
+                  // first item is the key we want to use and the second is the message
   $session->getFlashBag()->add('error', 'UserName was not found'); //internally, it'll create an error array with all the messages that belong to that key
   redirect('login.php');
 exit();
@@ -22,7 +23,7 @@ if (!password_verify(request()->get('password'),$user['password'])) {
 
 $expTime = time() + 3600; //for one hour
 
-//we will use the static method in code that lives in the code
+//we will use the static method in code that lives in the class
 // and encode() takes 3 properties, 1. the data we want in our claim,2 the signing key, and the encryption algorithm
  $jwt = \Firebase\JWT\JWT::encode([
    'iss' => request()->getBaseUrl(),
@@ -32,6 +33,7 @@ $expTime = time() + 3600; //for one hour
     'nbf' => time(),
     'is_admin' => $user['role_id'] == 1 //after our claims, we can sign the jwt  with our secret key from our env file
   ], getenv("SECRET_KEY"),'HS256');
+
 //Now that we have the JWT ready, we will use the HTTP Foundations package to set and retrieve cookies.
 
 //we use cookie class from symfony package
@@ -40,14 +42,15 @@ $expTime = time() + 3600; //for one hour
 $accessToken = new Symfony\Component\HttpFoundation\Cookie('access_token', $jwt, $expTime, '/',
 getenv('COOKIE_DOMAIN'));
 
+//once we have our access token, we want to redirect the user back with a cookie,so we modify our redirect func to allow for a cookie to be passed in
+
+
+
 $session->getFlashBag()->add('success', 'Success');
+
+
+//redirect and pass the cookie
 redirect('../showMovies.php',['cookies' => [$accessToken]]);
-
-
-
-
-
-
 
 //: Because we set our extra parameter to accept an array, make sure you pass the cookie as an array.
 

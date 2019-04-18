@@ -14,14 +14,15 @@ function request() {
 //after we set variable for the response and before we send it, we need to check for cookies inside of the extra array
 function redirect($path, $extra =[]) {
     $response = \Symfony\Component\HttpFoundation\Response::create(null, \Symfony\Component\HttpFoundation\Response::HTTP_FOUND, ['Location' => $path]);
-    if (key_exists('cookies', $extra)){  // if it exists we'll loop over each of the cookie so that we can set multiple cookies on the response headers using the SET cookie function
-      foreach($extra['cookies'] as $cookie) {
-        $response->headers->setCookie($cookie); //setcookie()  defines a cookie to be sent along with the rest of the HTTP headers.
+      if (key_exists('cookies', $extra)){  // if it exists we'll loop over each of the cookie so that we can set multiple cookies on the response headers using the SET cookie function
+        foreach($extra['cookies'] as $cookie) {
+          $response->headers->setCookie($cookie); //setcookie()  defines a cookie to be sent along with the rest of the HTTP headers.
+          }
       }
-    }
     $response->send();
     exit;
 }
+
 
 function decodeJwt($prop = null){ // $prop property will tell the funciton if we want to return a scpecific item from the JWT or return whole JWT object itself if the property is null
   \Firebase\JWT\JWT::$leeway = 1; //When there is a clock skew(zkresleni) of time between the signing and verifying servers, then we can run the access token cookie through the decode method
@@ -47,11 +48,12 @@ function isAuthenticated(){
       decodeJwt();
         return true; // if there were any exception thrown from the decoding of the jwt then we return false
   } catch (\Exception $e){
+
     return false;
   }
 }
 
-function requireAuth(){
+function requireAuth(){ //use it at the top of any file where you require authentication
   if(!isAuthenticated()){
     $accessToken = new Symfony\Component\HttpFoundation\Cookie('access_token', 'Expired', time()-3600,'/',
     getenv('COOKIE_DOMAIN')); //before we redirect we should set a new cookie  with the same name that expires in the past with an invalid jwt
@@ -67,8 +69,8 @@ function display_errors() {
     }
     // if we have errors
     $messages = $session->getFlashBag()->get('error');
-  //create an allert with all the alert messages
-  $response = '<div class="alert alert-danger alert-dismissable">';
+  //create an allert with all the error messages
+  $response = '<div class="alert alert-danger alert-dismissable">'; //
   foreach($messages as $message){
     $response .= "{$message}<br />";
     }
@@ -80,14 +82,16 @@ function display_errors() {
 function display_success_login(){
   global $session;
 
-    if(!$session->getFlashBag()->has('success')){
+  if(!$session->getFlashBag()->has('success')) {
       return;
-    }
-    $messages = $session->getFlashBag()->get('success');
-    $response = '<div class="alert alert-success alert-dismissable">';
-    foreach($messages as $message){
-      $response .= "{$message}<br />";
-    }
+  }
+
+  $messages = $session->getFlashBag()->get('success');
+
+  $response = '<div class="alert alert-success alert-dismissable">';
+  foreach ($messages as $message) {
+      $response .= "{$message}<br>";
+  }
   $response .= '</div>';
 
   return $response;

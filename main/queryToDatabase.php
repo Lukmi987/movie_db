@@ -147,6 +147,7 @@ class queryToDatabase {
     $r =  mysqli_query($this->connect(), $q) OR die(mysqli_error($this->connect()));
 
     while($row = mysqli_fetch_assoc($r)){
+      
         return $row;
     }
   }

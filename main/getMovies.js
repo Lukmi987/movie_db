@@ -5,7 +5,7 @@ xhr.onreadystatechange = function () {
     var moviesPage = document.getElementById('movies-data');
     var logged = moviesPage.dataset.logged;
     var movies = JSON.parse(xhr.responseText);
-    console.log(movies);
+    console.log(logged);
     var statusHTML = '<tr>';
     for(var i=0; i<movies.length; i+=1){
       statusHTML += '<td>';

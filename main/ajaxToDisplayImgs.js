@@ -8,13 +8,15 @@ $(document).ready(function (e) {
 var gallery = [];
 gallery.push(img.src);
 var position = 1;
-
-$("#right-btn").on('click',(function(e){
+function abc(){
+  console.log(1);
+}
+$("#right-btn").on('click',(function(e),abc(){
      $.ajax({
       url: 'phpForDisplayingPictureIntoGallery.php',
       type: "POST",
       data: {limit: offset, id:movieId},
-      success: function(data){
+      success: function abc(data){
         var picture = JSON.parse(data);
         gallery.push(picture[0]);
 
@@ -29,11 +31,12 @@ $("#right-btn").on('click',(function(e){
             } else {
                     img.src = gallery[position];
                     position++;
-                  }
+          }
+
+
       }
     });
-
     offset += 1;
-
   }));
+  console.log(abc());
  });
