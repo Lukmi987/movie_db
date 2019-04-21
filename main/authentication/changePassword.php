@@ -8,7 +8,7 @@ $confirmPassword = request()->get('confirm_password');
 
 if($newPassword != $confirmPassword) {
   $session->getFlashBag()->add('error','New passwords do not match, please try again.');
-  redirect('/account.php');
+  redirect('account.php');
 }
 
 $user = findUserByIdFromJWT();

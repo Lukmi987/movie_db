@@ -98,11 +98,11 @@ function isOwner($MovieOwnerId){//we can get the owner of the movie from Db and 
   }
   try{
   $user = decodeJwt('sub');
-  }{ catch(\Exception $e)
+} catch(\Exception $e){
     return false;
   }
 
-  return $MovieOwnerId == $userId;
+  return $MovieOwnerId == $user;
 }
 
 function display_errors() {
