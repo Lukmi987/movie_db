@@ -147,7 +147,7 @@ class queryToDatabase {
     $r =  mysqli_query($this->connect(), $q) OR die(mysqli_error($this->connect()));
 
     while($row = mysqli_fetch_assoc($r)){
-      
+
         return $row;
     }
   }
@@ -164,5 +164,34 @@ class queryToDatabase {
   return $r;
   }
 
+  public function returnAllUsers() {
+    $selectSQL = "SELECT * FROM users"; // select all
+    $selectQuery = mysqli_query($this->connect(), $selectSQL) or die(mysqli_error($this->connect())); // run sql query
+
+    while($row = mysqli_fetch_assoc($selectQuery)){
+      $users[] = $row;
+    }
+return $users;
+        }
+
+    public function promote($userId){
+
+      try{
+        $query = "UPDATE users SET role_id=1 WHERE id='$userId'";
+        $result = mysqli_query($this->connect(),$query) or die(mysqli_error($this->connect()));
+      } catch(\Exception $e){
+        throw $e;
+    }
+  }
+
+  public function demote($userId){
+
+    try{
+      $query = "UPDATE users SET role_id=2 WHERE id='$userId'";
+      $result = mysqli_query($this->connect(),$query) or die(mysqli_error($this->connect()));
+    } catch(\Exception $e){
+      throw $e;
+  }
+}
 }
  ?>

@@ -68,6 +68,7 @@ if(!isAuthenticated()){
   redirect('authentication/login.php',['cookies' => [$accessToken]]);
   }
 
+  global $session;
   try{
     if(! decodeJwt('is_admin')){
       $session->getFlashBag()->add('error', 'Not Authorized');
@@ -165,3 +166,9 @@ function display_success_login(){
        $updated = $query->resetUserPassword($password, $userId);
       return $updated;
     }
+
+    function getAllUsers(){
+        $query = new queryToDatabase();
+        $allUsers = $query->returnAllUsers();
+      return $allUsers;
+      }

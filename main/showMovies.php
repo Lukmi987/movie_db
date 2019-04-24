@@ -39,6 +39,9 @@ echo display_success_login();
   <h3><a href="insert.php">Insert a new movie to the list</a></h3>
   <h3><a href="authentication/doLogout.php">Log out</a></h3>
   <h3><a href="authentication /account.php">Reset your password</a></h3>
+<?php if(isAdmin()): ?>
+  <h3><a href="authentication/admin.php">Admin</a></h3>
+<?php endif; ?>
  <?php endif; ?>
   <div>
     <table id="listOfMovies" border="1">
