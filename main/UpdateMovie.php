@@ -3,23 +3,32 @@ include_once "../main/queryToDatabase.php"; // include connection file
 include_once "../main/authentication.php";
 require_once __DIR__ . '/authentication/requireFiles.php';
 requireAuth();
+
 $au = new authentication();
 $query = new queryToDatabase();
 $err = false; //defaultly we set it on false
 
 //fill the variables for the input fields of the form with the current movie when the page is loaded
 $result = $query->selectFilm();
+$MovieOwnerId;
   if ($result->num_rows > 0){
     while($row= mysqli_fetch_assoc($result)) {
       $title = $row['title'];
       $description = $row['description'];
       $year = $row['release_year'];
       $length = $row['length'];
+      $MovieOwnerId = $row['Owner_id'];
     }
   } else {
   echo "0 result";
   }
 
+
+//We have to be admin or its owner, happens only if both func returns false
+if(!isAdmin() && !isOwner($MovieOwnerId)){
+  $session->getFlashBag()->add('error', 'Not Authorized');
+  redirect('./showMovies.php');
+}
 
 //test post data from the form and update them to database
 if (isset($_POST['submit'])){

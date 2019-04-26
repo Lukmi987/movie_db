@@ -23,8 +23,10 @@ class queryToDatabase {
            $description= $this->test_input($_POST['description']);
            $release_year= $this->test_input($_POST['year']);
            $length= $this->test_input($_POST['length']);
+           $Owner_id = $_POST['UserId'];
 
-           $insertSQL = ("INSERT INTO movies(title,description,release_year,length) VALUES('$title','$description', '$release_year', '$length')");
+
+           $insertSQL = ("INSERT INTO movies(title,description,release_year,length,Owner_id) VALUES('$title','$description', '$release_year', '$length','$Owner_id')");
            $insertQuery = mysqli_query($conn,$insertSQL) or die(mysqli_error($conn));
            return $insertQuery;
         }

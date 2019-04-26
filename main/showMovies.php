@@ -31,6 +31,7 @@ require_once __DIR__ . "/authentication/requireFiles.php";
 
 <?php
 echo display_success_login();
+echo display_errors(); 
 
  if(!isAuthenticated()) : ?>
 <h3><a href="authentication/login.php">Sign in</a></h3>

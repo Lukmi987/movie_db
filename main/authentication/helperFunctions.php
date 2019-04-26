@@ -68,7 +68,7 @@ if(!isAuthenticated()){
   redirect('authentication/login.php',['cookies' => [$accessToken]]);
   }
 
-  global $session;
+  global $session;// if we want to use a session variable we need to specify that we pull it from the global scope
   try{
     if(! decodeJwt('is_admin')){
       $session->getFlashBag()->add('error', 'Not Authorized');

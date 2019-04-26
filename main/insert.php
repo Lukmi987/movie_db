@@ -1,6 +1,10 @@
 <?php
 include "../main/queryToDatabase.php";
 include "../main/authentication.php";
+require_once __DIR__ . './authentication/requireFiles.php';
+
+requireAuth();
+$userId = findUserByIdFromJWT();
 
 $err=false;
 
@@ -30,6 +34,7 @@ if(isset($_POST["submit"])) { // isset($var); ---> determines whether a variable
             <input type="text" name="description" placeholder="Description" /><br />
             <input type="number" name="year" placeholder="Year" /><br />
             <input type="number" name="length" placeholder="Lenght of the movie" /><br /><br />
+            <input type="hidden" name="UserId" value="<?php echo $userId['id']; ?>">
             <span><?php if($err){
               echo 'Fill the empty fields pls';
             } ?></span>
