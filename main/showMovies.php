@@ -3,7 +3,6 @@ include_once "../classes/Movie.php"; // include student class
 include_once "/queryToDatabase.php";
 require_once __DIR__ . "/authentication/requireFiles.php";
 
-//requireAuth();
 // Because we set our extra parameter to accept an array, make sure you pass the cookie as an array.
  if(request()->cookies->has('access_token')){ //we retrieve the info through cookie name
    echo "logged in";
@@ -31,7 +30,7 @@ require_once __DIR__ . "/authentication/requireFiles.php";
 
 <?php
 echo display_success_login();
-echo display_errors(); 
+echo display_errors();
 
  if(!isAuthenticated()) : ?>
 <h3><a href="authentication/login.php">Sign in</a></h3>

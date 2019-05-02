@@ -10,9 +10,8 @@ if($newPassword != $confirmPassword) {
   $session->getFlashBag()->add('error','New passwords do not match, please try again.');
   redirect('account.php');
 }
-
+//we get the id of the user by decoding cookie
 $user = findUserByIdFromJWT();
-
 
 if(empty($user)){
 $session->getFlashBag()->add('error','Some err Happened, Try again. If it continues please log out and log back in.');

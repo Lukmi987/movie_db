@@ -4,9 +4,8 @@ require __DIR__ . '/requireFiles.php';
 
  $query = new queryToDatabase();
 $userId = request()->get('userId');
-var_dump($userId);
+
 $role = request()->get('role');
-var_dump($role);
 
  switch(strtolower($role)){
    case 'promote':

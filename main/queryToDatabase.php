@@ -1,109 +1,164 @@
 <?php
-
-
-
 class queryToDatabase {
 
-  public function test_input($data){
-    $data=trim($data);
-    $data=stripslashes($data);
-    $data=htmlspecialchars($data);
-    return $data;
+    public function connectToDb(){
+      $host='localhost';
+      $db='movie';
+      $username='root';
+      $password='';
+
+      $dsn= "mysql:host=$host;dbname=$db";
+      try{
+        //create a PDO connection with the configuration data
+        $db = new PDO($dsn,$username,$password);
+        //after creating new PDO object, we have sat the error mode attribute of the PDO object to throw all exceptions for any kind of error that happpens
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      } catch (Exception $e){
+        echo $e->getMessage();
+        die();
+      }
+      return $db;
     }
 
-    public function connect(){
-      $conn = mysqli_connect('localhost', 'root', '', 'movie') or die(mysqli_error($conn));
-      return $conn;
-    }
+    public function test_input($data){
+      $data=trim($data);
+      $data=stripslashes($data);
+      $data=htmlspecialchars($data);
+      return $data;
+      }
 
       public function insertFilm(){
-        //for connec to databe I can inlcude dbocnn.php file into each function or I can call connect() method
-        include_once "../config/dbconn.php";
            $title = $this->test_input($_POST['title']);
            $description= $this->test_input($_POST['description']);
            $release_year= $this->test_input($_POST['year']);
            $length= $this->test_input($_POST['length']);
+
            $Owner_id = $_POST['UserId'];
+           $db =$this->connectToDb();
 
-
-           $insertSQL = ("INSERT INTO movies(title,description,release_year,length,Owner_id) VALUES('$title','$description', '$release_year', '$length','$Owner_id')");
-           $insertQuery = mysqli_query($conn,$insertSQL) or die(mysqli_error($conn));
-           return $insertQuery;
+           try{
+             $query = "INSERT INTO movies (title,description,release_year,length,Owner_id) VALUES (:title, :description, :release_year, :length, :Owner_id)";
+             $stmt = $db->prepare($query);
+             $stmt->bindParam(':title',$title);
+             $stmt->bindParam(':description',$description);
+             $stmt->bindParam(':release_year',$release_year);
+             $stmt->bindParam(':length',$length);
+             $stmt->bindParam(':Owner_id',$Owner_id);
+             return $stmt->execute();
+           }catch (\Exception $e){
+             throw $e;
+           }
         }
 
         public function deleteMovie($filmId){
-          $delete = "DELETE FROM movies WHERE film_id='$filmId'";
-          $deletequery= mysqli_query($this->connect(),$delete) or (mysqli_error($this->connect()));
-        if($deletequery){
-          return "Movie has been deleted";
-        } else {
-          return "Sorry try again";
-        }
+          $db =$this->connectToDb();
+          try{
+            $query = "DELETE FROM movies WHERE film_id=?";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(1,$filmId);
+            $stmt->execute();
+          } catch (\Exception $e){
+          throw $e;
+          }
+        return  "Movie has been deleted";
       }
 
         public function updateFilm(){
-          $au = new authentication();
-          $filmId = $_GET['id'];
+          $db =$this->connectToDb();
+          $film_id = $_GET['id'];
           $title = $this->test_input($_POST['title']);
           $description= $this->test_input($_POST['description']);
           $release_year= $this->test_input($_POST['year']);
           $length= $this->test_input($_POST['length']);
 
-          $update =  "UPDATE
-                        movies
-                      SET
-                        title='".$title."',
-                        description='".$description."',
-                        release_year='".$release_year."',
-                        length='".$length."'
-                     WHERE
-                       film_id ='$filmId'";
+          try {
+              $query =  "UPDATE
+                            movies
+                          SET
+                            title=:title,
+                            description=:description,
+                            release_year=:release_year,
+                            length=:length
+                         WHERE
+                           film_id= :film_id";
 
-                       $updateQuery = mysqli_query($this->connect(),$update) or die(mysqli_error($this->connect()));
 
-                       return $updateQuery;
+                           $stmt = $db->prepare($query);
+                           $stmt->bindParam(':title',$title);
+                           $stmt->bindParam(':description',$description);
+                           $stmt->bindParam(':release_year',$release_year);
+                           $stmt->bindParam(':length',$length);
+                           $stmt->bindParam(':film_id',$film_id);
+                   return $stmt->execute();
+            } catch (\Exception $e){
+              throw $e;
+            }
         }
 
     public function  selectFilm(){
-      $filmId = $_GET['id'];
-      $sql = "SELECT * FROM movies WHERE film_id='$filmId'";
-      $result = mysqli_query($this->connect(), $sql) OR die(mysqli_error($this->connect()));
-      return $result;
-    }
-
-    public function  findImgAccordingtheFilmid($filmId){
-      $sql = "SELECT * FROM images WHERE film_id='$filmId'";
-      $result = mysqli_query($this->connect(), $sql) OR die(mysqli_error($this->connect()));
-
-      $images = [];
-      //fill the array $images with the id of images for the movie we want to delete
-      if(mysqli_num_rows($result) != 0) {
-        while($row = mysqli_fetch_assoc($result)){
-            $images[] = $row['id'];
-        }
-        return $images;
-      }
-    }
-
-    public function deleteImages($images){
-      $id = [];
-      foreach($images as $image){
-        $id[] =  $image;
-      }
-      $string  =  implode("','",$id);//create string with all id of images we wan to delete
-      $sql = "DELETE FROM images WHERE id in  ('$string')";
-      $result = mysqli_query($this->connect(), $sql) OR die(mysqli_error($this->connect()));
-
-      if($result){
-        } else{
-        echo 'error';
+      $db =$this->connectToDb();
+      $film_id = intval($_GET['id']);
+      try {
+        $query = "SELECT * FROM movies WHERE film_id=:film_id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':film_id', $film_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch(\Exception $e) {
+        throw $e;
       }
     }
 
     public function selectAllFilms(){
-      $selectSQL = "SELECT * FROM movies"; // select all
-      $selectQuery = mysqli_query($this->connect(), $selectSQL) or die(mysqli_error($this->connect())); // run sql query
-        return $selectQuery;
+      $db =$this->connectToDb();
+      try{
+        $query = "SELECT * FROM movies"; // select all
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch (\Exception $e) {
+        throw $e;
+      }
+    }
+
+    public function  findImgAccordingtheFilmid($film_id){
+      $db =$this->connectToDb();
+      try{
+          $query = "SELECT * FROM images WHERE film_id=:film_id";
+          $stmt = $db->prepare($query);
+          $stmt->bindParam('film_id',$film_id);
+          $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Exception $e){
+        throw $e;
+      }
+    }
+
+    public function saveImages($myId,$target_dir,$file_name){
+      $db = $this->connectToDb();
+      try{
+        $query = 'INSERT INTO images(film_id,name) VALUES ("'.$myId.'","'.$target_dir.$file_name.'")';
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+      } catch(\Exception $e){
+        throw $e;
+      }
+    }
+
+    public function deleteImages($images){
+      $db =$this->connectToDb();
+      try{
+        $id;
+        foreach($images as $image){
+          $id[] =  intval($image['id']);
+        }
+          $idOfImages  =  intval(implode("','",$id));
+          $query = "DELETE FROM images WHERE id in  ('$idOfImages')";
+          $stmt = $db->prepare($query);
+          $stmt->execute();
+        } catch (\Exception $e){
+          throw $e;
+        }
     }
 
     public function verifyInsertSuccess($query){
@@ -116,84 +171,126 @@ class queryToDatabase {
       }
     }
 
-    public function createArrayofFilmsandReturnJsonFile($selectQuery){
-      if(mysqli_num_rows($selectQuery) != 0) { // check if there are record(s)
-
-        $movies = array();
-        while($row = mysqli_fetch_assoc($selectQuery)){
-          $movies[] = $row;
+    public function createArrayofFilmsandReturnJsonFile($movies){
+      if(isset($movies)) {
+        $listOfMovies = array();
+        foreach($movies as $row){
+          $listOfMovies[] = $row;
         }
-        //write to json file
 
-        $fp = fopen('moviesData.json', 'w');
-        fwrite($fp, json_encode($movies));
-        fclose($fp);
+        $fp = fopen('moviesData.json', 'w'); //write to json file
+          fwrite($fp, json_encode($listOfMovies));
+          fclose($fp);
       }
+        else echo 'Sorry something went wrong !!';
     }
 
-// function to load a first picture into gallery from a database
+    // function to load a first picture into gallery from a database
     public function firstImgGallery(){
-      $filmId = $_GET['id'];
-      $q = "SELECT name FROM images WHERE film_id = '$filmId' ORDER BY name  LIMIT 1 OFFSET 0 ";
-      $r = mysqli_query($this->connect(),$q);
-
-      while($row = mysqli_fetch_assoc($r)){
-          //print_r($row);
-          $image = $row['name'];
-      }
-      return $image;
-  }
-
-  public function findUserByEmail($email){
-    $q = "SELECT * FROM users WHERE email = '$email'";
-    $r =  mysqli_query($this->connect(), $q) OR die(mysqli_error($this->connect()));
-
-    while($row = mysqli_fetch_assoc($r)){
-
-        return $row;
-    }
-  }
-
-  public function createUser($email, $password){
-    $q = "INSERT INTO users(email, password, role_id) VALUES ('$email','$password','2')";
-    $r = mysqli_query($this->connect(),$q) or die(mysqli_error($this->connect()));
-  return $this->findUserByEmail($email);
-  }
-
-  public function resetUserPassword($password, $userId){
-    $q = "UPDATE users SET password ='$password' WHERE id = '$userId'";
-    $r = mysqli_query($this->connect(),$q) or die(mysqli_error($this->connect()));
-  return $r;
-  }
-
-  public function returnAllUsers() {
-    $selectSQL = "SELECT * FROM users"; // select all
-    $selectQuery = mysqli_query($this->connect(), $selectSQL) or die(mysqli_error($this->connect())); // run sql query
-
-    while($row = mysqli_fetch_assoc($selectQuery)){
-      $users[] = $row;
-    }
-return $users;
-        }
-
-    public function promote($userId){
-
+      $db = $this->connectToDb();
       try{
-        $query = "UPDATE users SET role_id=1 WHERE id='$userId'";
-        $result = mysqli_query($this->connect(),$query) or die(mysqli_error($this->connect()));
+        $filmId = intval($_GET['id']);
+        $query = "SELECT name FROM images WHERE film_id = :film_id ORDER BY name  LIMIT 1 OFFSET 0 ";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':film_id',$filmId);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
       } catch(\Exception $e){
         throw $e;
     }
   }
 
-  public function demote($userId){
+    public function findUserByEmail($email){
+     $db = $this->connectToDb();
+       try{
+           $query = "SELECT * FROM users WHERE email = ?";
+           $stmt = $db->prepare($query);
+           $stmt->bindParam(1,$email);
+           $stmt->execute();
+           return $stmt->fetch(PDO::FETCH_ASSOC);
+      } catch (\Exception $e){
+          throw $e;
+        }
+     }
 
+    public function findUserById($userId){
+      $db= $this->connectToDb();
     try{
-      $query = "UPDATE users SET role_id=2 WHERE id='$userId'";
-      $result = mysqli_query($this->connect(),$query) or die(mysqli_error($this->connect()));
-    } catch(\Exception $e){
-      throw $e;
-  }
-}
+      $query = "SELECT * FROM users WHERE id =:id";
+      $stmt = $db->prepare($query);
+      $stmt->bindParam('id',$userId);
+      $stmt->execute();
+      return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch(\Exception $e) {
+        throw $e;
+      }
+    }
+
+    public function createUser($email, $password){
+      $db = $this->connectToDb();
+
+      try{
+          $query = "INSERT INTO users (email,password,role_id) VALUES(:email, :password, 2)";
+          $stmt = $db->prepare($query);
+          $stmt->bindParam(':email',$email);
+          $stmt->bindParam(':password',$password);
+          $stmt->execute();
+          return $this->findUserByEmail($email);
+     } catch (\Exception $e){
+         throw $e;
+       }
+    }
+
+    public function resetUserPassword($password, $userId){
+      $db = $this->connectToDb();
+
+      try {
+          $query = "UPDATE users SET password = :password WHERE id =:id";
+          $stmt = $db->prepare($query);
+          $stmt->bindParam(':password', $password);
+          $stmt->bindParam(':id', $userId);
+          return $stmt->execute();
+      } catch (\Exception $e) {
+          throw $e;
+      }
+    }
+
+    public function returnAllUsers() {
+      $db = $this->connectToDb();
+      try{
+          $query = "SELECT * FROM users";
+          $stmt = $db->prepare($query);
+          $stmt->execute();
+          return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch(\Exception $e){
+          throw $e;
+    }
+      return $users;
+    }
+
+      public function promote($userId){
+        $db = $this->connectToDb();
+        try{
+          $query = "UPDATE users SET role_id=1 WHERE id=:id";
+          $stmt = $db->prepare($query);
+          $stmt->bindParam(':id',$userId);
+          $stmt->execute();
+
+        } catch(\Exception $e){
+          throw $e;
+        }
+      }
+
+      public function demote($userId){
+        $db = $this->connectToDb();
+        try{
+          $query = "UPDATE users SET role_id=2 WHERE id=:id";
+          $stmt = $db->prepare($query);
+          $stmt->bindParam(':id',$userId);
+          $stmt->execute();
+        } catch(\Exception $e){
+          throw $e;
+        }
+      }
 }
  ?>

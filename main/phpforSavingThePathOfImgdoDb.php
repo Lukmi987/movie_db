@@ -15,16 +15,11 @@ $target_dir = "upload/";
 //uploding file
 if(move_uploaded_file($file_tmp_name,$target_dir.$file_name)){
     $query = new queryToDatabase();
-    $conn = $query->connect();
-
-    $q = 'INSERT INTO images(film_id,name) VALUES ("'.$myId.'","'.$target_dir.$file_name.'")';
-    //run query
-    $r = mysqli_query($conn,$q);
-
-    if(mysqli_affected_rows($conn)== 1) {
+    $query->saveImages($myId,$target_dir,$file_name);
+    if($query) {
       echo "File has been successfully uploaded <br />";
     } else {
-     print_r($conn);
+     echo "Something went wrong <br />";
   }
 }
 

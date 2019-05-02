@@ -152,13 +152,8 @@ function display_success_login(){
     } catch(\Exception $e){
       throw $e;
     }
-
-    $q = "SELECT * FROM users WHERE id = '$userId'";
-    $r =  mysqli_query($query->connect(), $q) OR die(mysqli_error($query->connect()));
-
-    while($row = mysqli_fetch_assoc($r)){
-        return $row;
-    }
+    $user= $query->findUserById($userId);
+    return $user;
   }
 
     function updateUser($password,$userId){

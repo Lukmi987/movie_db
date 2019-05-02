@@ -9,10 +9,10 @@ $query = new queryToDatabase();
 $err = false; //defaultly we set it on false
 
 //fill the variables for the input fields of the form with the current movie when the page is loaded
-$result = $query->selectFilm();
+$movie = $query->selectFilm();
 $MovieOwnerId;
-  if ($result->num_rows > 0){
-    while($row= mysqli_fetch_assoc($result)) {
+  if (isset($movie)){
+    foreach ($movie as $row) {
       $title = $row['title'];
       $description = $row['description'];
       $year = $row['release_year'];
@@ -86,7 +86,12 @@ to save the path of the img to database -->
 </br>
 
 <div class="container">
-  <img id="carousel" src="<?php echo $query->firstImgGallery(); ?>" alt="">
+  <img id="carousel" src="<?php $image = $query->firstImgGallery();
+  foreach($image as $row){
+  $image =  $row['name'];
+  }
+  echo $image;
+  ?>" alt="">
   <button id="right-btn"><i class="arrow"></i><button>
 </div>
 
