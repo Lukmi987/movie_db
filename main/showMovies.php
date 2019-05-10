@@ -1,7 +1,6 @@
 <?php
-include_once "../classes/Movie.php"; // include student class
 include_once "/queryToDatabase.php";
-require_once __DIR__ . "/authentication/requireFiles.php";
+include_once "/authentication/requireFiles.php";
 
 // Because we set our extra parameter to accept an array, make sure you pass the cookie as an array.
  if(request()->cookies->has('access_token')){ //we retrieve the info through cookie name
