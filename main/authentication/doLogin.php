@@ -50,7 +50,7 @@ $session->getFlashBag()->add('success', 'Success');
 
 
 //redirect and pass the cookie
-redirect('../showMovies.php',['cookies' => [$accessToken]]);
+redirect('../index.php',['cookies' => [$accessToken]]);
 
 //: Because we set our extra parameter to accept an array, make sure you pass the cookie as an array.
 

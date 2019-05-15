@@ -2,8 +2,6 @@
 $(document).ready(function (e) {
   $("#uploadimage").on('submit',(function(e) {
   e.preventDefault();
-  $("#message").empty();
-  $('#loading').show();
     $.ajax({
     url: "phpforSavingThePathOfImgdoDb.php", // Url to which the request is send
     type: "POST",             // Type of request to be send, called as method
@@ -13,7 +11,6 @@ $(document).ready(function (e) {
     processData:false,        // To send DOMDocument or non processed data file it is set to false
     success: function(data)   // A function to be called if request succeeds
     {
-    $('loading').hide();
     $("#message").html(data);
     }
     });

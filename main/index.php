@@ -1,10 +1,8 @@
 <?php
 include_once '/queryToDatabase.php';
 include_once '/authentication/requireFiles.php';
-
+require_once __DIR__ . '/head.php';
 $query = new queryToDatabase();
-
-
 
 try{
     $AllMovies = $query->selectAllFilms();
@@ -12,47 +10,35 @@ try{
 } catch (\Exception $e){
     throw $e;
 }
-
 ?>
+  <body id='movies-data' data-logged='<?php echo isAuthenticated();  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
+    <!-- Header -->
+    <div class='header'>
+      <h1>Movie Databese!!!</h1>
+      <!-- Search Form -->
+      <form method="get" action="catalog.php">
+        <label for='s'>Search</label>
+        <input type='text' name='s' id='s' />
+        <input type='submit' value='go' />
+      </form>
+    </div> <!-- /header -->
+    <!-- Navigation -->
+    <div class='navbar'>
+      <ul class='navigation'>
+      <?php
+        if(!isAuthenticated()) :?>
+        <li><a href='authentication/login.php'>Sign In</a></li>
+        <li><a href="authentication/registrationForm.php">Registration</a></li>
+      <?php else: ?>
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>List of Movies</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel='stylesheet' href='css/normalize.css'>
-    <link rel='stylesheet' href='css/style.css'>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="getMovies.js"></script>
-  <head>
-    <body id='movies-data' data-logged='<?php echo isAuthenticated();  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
-      <!-- Header -->
-      <div class='header'>
-        <h1>Movie Databese!!!</h1>
-        <!-- Search Form -->
-        <form method="get" action="catalog.php">
-          <label for='s'>Search</label>
-          <input type='text' name='s' id='s' />
-          <input type='submit' value='go' />
-        </form>
-      </div> <!-- /header -->
-      <!-- Navigation -->
-      <div class='navbar'>
-        <ul class='navigation'>
-        <?php
-          if(!isAuthenticated()) :?>
-          <li><a href='authentication/login.php'>Sign In</a></li>
-          <li><a href="authentication/registrationForm.php">Registration</a></li>
-        <?php else: ?>
-
-          <li><a href="authentication/doLogout.php">Log out</a></li>
-          <li><a href="authentication /account.php">Reset your password</a></li>
-            <?php if(isAdmin()): ?>
-              <li><a href="authentication/admin.php">Admin</a></li>
-            <?php endif; ?>
+        <li><a href="authentication/doLogout.php">Log out</a></li>
+        <li><a href="authentication /account.php">Reset your password</a></li>
+          <?php if(isAdmin()): ?>
+            <li><a href="authentication/admin.php">Admin</a></li>
           <?php endif; ?>
-        </ul>
-      </div> <!-- /Navbar -->
+        <?php endif; ?>
+      </ul>
+    </div> <!-- /Navbar -->
 
       <div class='wrapper'>
       <?php
@@ -67,7 +53,6 @@ try{
       ?>
 
       <div class='row'>
-
         <div class='video embed-responsive embed-responsive-16by9'>
           <iframe class="embed-responsive-item"  src="https://www.youtube.com/embed/V75dMMIW2B4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
           </iframe>
