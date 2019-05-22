@@ -1,13 +1,15 @@
 <?php
 include "../main/queryToDatabase.php"; // include connection file
 
-$id = $_POST['file'];
-$myId = intval($id);
 
-$file_name = $_FILES['file']['name'];
-$file_type = $_FILES['file']['type'];
-$file_tmp_name = $_FILES['file']['tmp_name'];
-$file_size = $_FILES['file']['size'];
+
+$myId = intval($_POST['idmovie']);
+
+$file_name = $_FILES['idmovie']['name'];
+$file_type = $_FILES['idmovie']['type'];
+$file_tmp_name = $_FILES['idmovie']['tmp_name'];
+$file_size = $_FILES['idmovie']['size'];
+
 
 //target directory
 $target_dir = "upload/";

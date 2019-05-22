@@ -41,49 +41,93 @@ if (isset($_POST['submit'])){
 }
 ?>
 
+<!DOCTYPE html>
 <html>
-<head>
-  <title>Select movie</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet"  href="stylesForGallery.css">
-  <script src="ajaxForGettingImg.js"></script>
-  <script src="ajaxToDisplayImgs.js"></script>
-  </head>
-<body>
+  <head>
+    <title>List of Movies</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel='stylesheet' href='css/normalize.css'>
+    <link rel='stylesheet' href='css/style.css'>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="ajaxForGettingImg.js"></script>
+    <script src="ajaxToDisplayImgs.js"></script>
+  <head>
 
-      <form action="" method="POST">
-                <br> Title: <input type="text" name='title' value="<?php echo $title; ?>"><br>
-                <br> Description <input type="text" name="description" value="<?php echo $description; ?>"><br>
-                <br> Year <input type="number" name="year" value="<?php echo $year; ?>"><br>
-                <br> Length <input type="number" name="length" value="<?php echo $length; ?>"><br><br>
-                  <span><?php
-                  if($err){
-                    echo 'Fill the empty fields pls';
-                    }
-                  ?></span>
-                 <input type="submit" name="submit" value="submit" /><br>
-      </form> <br>
 
+<body id='movies-data' data-logged='<?php echo isAuthenticated();  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
+  <!-- Header -->
+  <div class='header'>
+    <h1>Movie Databese!!!</h1>
+    <!-- Search Form -->
+    <form method="get" action="catalog.php">
+      <label for='s'>Search</label>
+      <input type='text' name='s' id='s' />
+      <input type='submit' value='go' />
+    </form>
+  </div> <!-- /header -->
+  <!-- Navigation -->
+  <div class='navbar'>
+    <ul class='navigation'>
+      <li><a href='index.php'>HOME</a></li>
+    <?php
+      if(!isAuthenticated()) :?>
+      <li><a href='authentication/login.php'>Sign In</a></li>
+      <li><a href="authentication/registrationForm.php">Registration</a></li>
+    <?php else: ?>
+
+      <li><a href="authentication/doLogout.php">Log out</a></li>
+      <li><a href="authentication /account.php">Reset your password</a></li>
+        <?php if(isAdmin()): ?>
+          <li><a href="authentication/admin.php">Admin</a></li>
+        <?php endif; ?>
+      <?php endif; ?>
+    </ul>
+  </div> <!-- /Navbar -->
+
+    <div class='wrapper'>
+      <div class='row'>
+        <div class='container d-flex flex-row flex-wrap justify-content-sm-center'>
+        <div class="well col-sm-6 col-sm-offset-3">
+          <h1>Update Movie</h1>
+          <form action="" method="POST">
+              <label for='title' class='sr-only'>Title</label>
+              <input type="text" name='title' class="form-control" value="<?php echo $title; ?>" required>
+              <br>
+              <label for='description' class='sr-only'>Description</label>
+              <input type="text" name="description" class="form-control" value="<?php echo $description; ?>" required>
+              <br>
+              <label for='year' class='sr-only'>year</label>
+              <input type="number" name="year" class="form-control" value="<?php echo $year; ?>" required>
+              <br>
+              <label for='length' class='sr-only'>length</label>
+              <input type="number" name="length" class="form-control" value="<?php echo $length; ?>">
+              <br>
+              <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Update</button>
+      </form>
+    </div>
+    <div class='col'>
+      <div class="form-group">
+        <h2>Save a new image for the movie by using Ajax</h2>
+        <form id="uploadimage" action="" method="post">
+            <input type="file" name="idmovie" required> <br /> <!-- when i put input type file browser fills the name of the the button -->
+            <input type="hidden" name='idmovie' value= <?php echo $_GET['id'] ?> /> <!-- get id of the current movie -->
+            <input type="submit" value="Upload">
+          </div>
+        </form>
+        <h4 id='message'></h4>
+    </div>
+  </div>
 <!-- imgs are saved on the local machine, using ajax for getting img path and sending it to php script
 to save the path of the img to database -->
-<h2>Save a new image</h2>
-<h1>Ajax Image Upload</h1><br/>
-<hr>
-<form id="uploadimage" action="" method="post" enctype="multipart/form-data">
-  <div id="selectImage">
-    <label>Select Your Image</label><br/>
-      <input type="file" name="file" required /> <br /> <!-- when i put input type file browser fills the name of the the button -->
-      <input type="hidden" id="mynumber" name ="file" value= <?php echo $_GET['id'] ?> /> <!-- get id of the current movie -->
-      <input type="submit" value="Upload" />
-    </div>
-</form>
-<h4 id='loading' >loading..</h4>
 
-<!--  -->
+
+<div class='container'>
 <h2>Using ajax to call dinamically img on each click of the button</h2>
 <button type="button" id="ButtonImgs">Load 3 pictures</button>
 </br>
 </br>
+</div>
 
 <div class="container">
   <img id="carousel" src="<?php $image = $query->firstImgGallery();
@@ -95,5 +139,10 @@ to save the path of the img to database -->
   <button id="right-btn"><i class="arrow"></i><button>
 </div>
 
+    </div> <!-- row -->
+  </div><!-- wrapper -->
+  <footer class='main-footer'>
+    <span>&copy;2019 Lukas Komprs</span>
+  </footer>
 </body>
 </html>
