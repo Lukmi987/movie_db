@@ -73,6 +73,10 @@ body{
   margin: 0 .5em .8em;
 }
 
+#s{
+  color: black;
+}
+
  .video {
   margin: 30px 30px;
   max-width: 80%;

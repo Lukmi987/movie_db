@@ -292,5 +292,54 @@ class queryToDatabase {
           throw $e;
         }
       }
+
+    public function get_movies_count($search){
+      $db= $this->connectToDb();
+
+      try{
+        $sql = 'SELECT COUNT(film_id) FROM movies';
+
+        if (!empty($search)) {
+    $result = $db->prepare(
+        $sql
+        . " WHERE title LIKE ?"
+    );
+    $result->bindValue(1,'%'.$search.'%',PDO::PARAM_STR);
+    $result->execute();
+    $count = $result->fetchColumn(0);
+    return $count;
+  }
+      }catch(\Exception $e){
+        throw $e;
+      }
+    }
+
+  public function search_movie_array($search){
+    $db = $this->connectToDb();
+
+    try{
+      $sql = "SELECT *
+      FROM movies
+      WHERE title LIKE ?
+      ORDER BY
+      REPLACE(
+        REPLACE(
+          REPLACE(title,'The ',''),
+          'An ',
+          ''
+        ),
+      'A ',
+      ''
+    )";
+    $results = $db->prepare($sql);
+    $results->bindValue(1,'%'.$search.'%',PDO::PARAM_STR);
+    $results->execute();
+    } catch(\Exception $e){
+      echo 'Unable to retrieved results';
+      exit;
+    }
+    $searchArray = $results->fetchAll();
+    return $searchArray;
+  }
 }
  ?>
