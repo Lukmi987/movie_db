@@ -17,9 +17,8 @@ require_once __DIR__ . '/requireFiles.php';
    <div class='header'>
      <h1>Movie Databese!!!</h1>
      <!-- Search Form -->
-     <form method="get" action="catalog.php">
-       <label for='s'>Search</label>
-       <input type='text' name='s' id='s' />
+     <form method="get" action="../doSearch.php">
+       <input class='search' type='text' name='s' id='s' placeholder="Search database" />
        <input type='submit' value='go' />
      </form>
    </div> <!-- /header -->
