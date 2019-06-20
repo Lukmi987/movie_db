@@ -341,5 +341,29 @@ class queryToDatabase {
     $searchArray = $results->fetchAll();
     return $searchArray;
   }
+
+  public function ajaxLiveSearch($searchQuery){
+      $db = $this->connectToDb();
+
+    //  INSTR() function returns the position of the first occurrence of a string in another string.
+    // It orders the result according to the best match. For example, if you search for wa, water will be before coward.
+      try{
+        $like = '%' . $searchQuery . '%';
+        $sql = 'SELECT title
+	           FROM movies
+             WHERE lower(title) LIKE ?
+             ORDER BY INSTR(title,?),
+             title LIMIT 4';
+
+             $results = $db->prepare($sql);
+             $results->bindParam(1,$like);
+             $results->bindParam(2,$searchQuery);
+             $results->execute();
+            return  $results->fetchAll(PDO::FETCH_ASSOC);
+           } catch (\Exception $e) {
+            throw $e;
+          }
+  }
+
 }
  ?>

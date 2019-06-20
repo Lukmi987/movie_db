@@ -11,6 +11,7 @@ try{
     throw $e;
 }
 ?>
+
   <body id='movies-data' data-logged='<?php echo isAuthenticated();  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
     <!-- Header -->
     <div class='header'>
@@ -19,8 +20,11 @@ try{
       <form method="get" action="doSearch.php">
         <input type='text' name='s' id='s' placeholder="Search database" />
         <input type='submit' value='go' />
+  <div id='result'></div>
       </form>
-    </div> <!-- /header -->
+
+    </div>
+    <!-- /header -->
     <!-- Navigation -->
     <div class='navbar'>
       <ul class='navigation'>
@@ -92,5 +96,7 @@ try{
     <footer class='main-footer'>
       <span>&copy;2019 Lukas Komprs</span>
     </footer>
+    <script src='ajax_live_search.js'>
+    </script>
     </body>
 </html>
