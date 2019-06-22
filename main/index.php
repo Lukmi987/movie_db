@@ -86,16 +86,13 @@ if(isAuthenticated()){
           </table>
         </div> <!-- /main -->
         <div class='side_content col'>
-          <h4>New movies in cinemas</h4>
-          <ul>
-            <li>Bohemian Rhapsidy</li>
-            <li>Iron man 3</li>
-            <li>True Detective Season 3</li>
-            <li>Avatar</li>
-            <li>Gladiator</li>
-            <li>Matrix 3</li>
-            <li>Deadpool 2</li>
-          </ul>
+          <h4>Logic of the system</h4>
+          <p>
+            When you register you can create a movie and you have got rights to Delete and Update your created movies.
+          </p>
+          <p>
+            As a <b>Admin</b> you can create, delete and update any movie. You have also an access to the Admin Panel where you can promote a user to Admin and demote back to normal user.
+          <p>
         </div> <!-- /side -->
       </div> <!-- /row -->
     </div> <!-- /wrapper -->
