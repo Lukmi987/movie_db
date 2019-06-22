@@ -26,6 +26,7 @@ function searForData(value){
     if(this.readyState === 4 && this.status === 200) {
       try{
           var json = JSON.parse(ajax.responseText);
+          console.log(json);
         } catch(e){
           return;
         }
@@ -39,7 +40,7 @@ function searForData(value){
   }
 
   //open the connection
-  ajax.open("GET","search.php?q="+ value,true);
+  ajax.open("GET","/movie_db/main/authentication/search.php?q="+ value,true);
   ajax.send();
 }
 

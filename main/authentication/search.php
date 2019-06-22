@@ -1,5 +1,5 @@
 <?php
-include_once '/queryToDatabase.php';
+include_once '/../queryToDatabase.php';
 
   $query = new queryToDatabase();
 
@@ -10,7 +10,8 @@ include_once '/queryToDatabase.php';
   foreach ($result as $row) {
     $searchResult[] = $row['title'];
   }
-  echo json_encode($searchResult);
+ echo json_encode($searchResult);
+
 
 //
 //

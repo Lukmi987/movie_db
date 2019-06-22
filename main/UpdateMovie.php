@@ -1,4 +1,5 @@
 <?php
+
 include_once "../main/queryToDatabase.php"; // include connection file
 include_once "../main/authentication.php";
 require_once __DIR__ . '/authentication/requireFiles.php';
@@ -27,9 +28,9 @@ $MovieOwnerId;
 //We have to be admin or its owner, happens only if both func returns false
 if(!isAdmin() && !isOwner($MovieOwnerId)){
   $session->getFlashBag()->add('error', 'Not Authorized');
-  redirect('./showMovies.php');
-}
+  redirect('./index.php');
 
+}
 //test post data from the form and update them to database
 if (isset($_POST['submit'])){
   $err = $au->testInput(); // returns true if some field is empty
@@ -39,6 +40,7 @@ if (isset($_POST['submit'])){
   echo $wasItsave;
   }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +50,10 @@ if (isset($_POST['submit'])){
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel='stylesheet' href='css/normalize.css'>
     <link rel='stylesheet' href='css/style.css'>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+      rel = "stylesheet">
+   <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+   <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="ajaxForGettingImg.js"></script>
     <script src="ajaxToDisplayImgs.js"></script>
@@ -143,5 +148,7 @@ to save the path of the img to database -->
   <footer class='main-footer'>
     <span>&copy;2019 Lukas Komprs</span>
   </footer>
+  <script src='ajax_live_search.js'>
+  </script>
 </body>
 </html>

@@ -76,5 +76,7 @@ if(isset($_POST["submit"])) { // isset($var); ---> determines whether a variable
       <footer class='main-footer'>
         <span>&copy;2019 Lukas Komprs</span>
       </footer>
+      <script src='ajax_live_search.js'>
+      </script>
     </body>
 </html>

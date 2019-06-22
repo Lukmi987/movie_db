@@ -2,6 +2,7 @@
 include_once '/queryToDatabase.php';
 include_once '/authentication/requireFiles.php';
 require_once __DIR__ . '/head.php';
+require_once __DIR__ . '/authentication/requireFiles.php';
 $query = new queryToDatabase();
 
 try{
@@ -10,9 +11,14 @@ try{
 } catch (\Exception $e){
     throw $e;
 }
+if(isAuthenticated()){
+ $IdCurrentLoggedUser = findUserByIdFromJWT();
+ $IdCurrentLoggedUser  = intval($IdCurrentLoggedUser['id']);
+ var_dump($IdCurrentLoggedUser);
+}
 ?>
-
-  <body id='movies-data' data-logged='<?php echo isAuthenticated();  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
+                                                      <!-- I do not need isAuthenticated , use func from (!isAdmin() && !isOwner($MovieOwnerId) -->
+  <body id='movies-data' data-logged='<?php echo $IdCurrentLoggedUser;  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
     <!-- Header -->
     <div class='header'>
       <h1>Movie Databese!!!</h1>
@@ -68,10 +74,10 @@ try{
                        <td>Title</td>
                        <td>Description</td>
                        <td>Release year</td>
-                       <td>Length of the movie</td>
+                       <td>Duration</td>
                        <?php
                          if(isAuthenticated()): ?>
-                       <td><a href="insert.php">Insert a new Movie to DB</a></td>
+                       <td><a href="insert.php">Insert Movie</a></td>
                     <?php endif; ?>
                      </tr>
                    </thead>
