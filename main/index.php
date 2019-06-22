@@ -13,12 +13,12 @@ try{
 }
 if(isAuthenticated()){
  $IdCurrentLoggedUser = findUserByIdFromJWT();
+ $roleId = intval($IdCurrentLoggedUser['role_id']);
  $IdCurrentLoggedUser  = intval($IdCurrentLoggedUser['id']);
- var_dump($IdCurrentLoggedUser);
 }
 ?>
                                                       <!-- I do not need isAuthenticated , use func from (!isAdmin() && !isOwner($MovieOwnerId) -->
-  <body id='movies-data' data-logged='<?php echo $IdCurrentLoggedUser;  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
+  <body id='movies-data' data-userid='<?php echo $IdCurrentLoggedUser;  ?>' data-role='<?php echo $roleId;  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
     <!-- Header -->
     <div class='header'>
       <h1>Movie Databese!!!</h1>
