@@ -50,8 +50,7 @@ if(isset($_POST["submit"])) { // isset($var); ---> determines whether a variable
       </div> <!-- /Navbar -->
 
         <div class='wrapper'>
-          <div class='row'>
-            <div class="well col-sm-6 col-sm-offset-3">
+            <div class=" forms well col-sm-8 col-sm-offset-3 col-lg-5">
               <h1>ADD NEW MOVIE TO DB</h1>
               <form action="" method="post">
                 <!-- attribute 'name' in each input are used as the passing variable from user to server which runs php code -->
@@ -71,7 +70,6 @@ if(isset($_POST["submit"])) { // isset($var); ---> determines whether a variable
                 <button class="btn btn-lg btn-primary btn-block" type="submit" name='submit'>Submit</button>
               </form>
             </div>
-          </div> <!-- /row -->
       </div> <!-- wrapper -->
       <footer class='main-footer'>
         <span>&copy;2019 Lukas Komprs</span>

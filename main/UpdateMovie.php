@@ -90,9 +90,8 @@ if (isset($_POST['submit'])){
   </div> <!-- /Navbar -->
 
     <div class='wrapper'>
-      <div class='row'>
         <div class='container d-flex flex-row flex-wrap justify-content-sm-center'>
-        <div class="well col-sm-6 col-sm-offset-3">
+        <div class="forms well col-sm-8 col-sm-offset-3">
           <h1>Update Movie</h1>
           <form action="" method="POST">
               <label for='title' class='sr-only'>Title</label>
@@ -143,7 +142,6 @@ to save the path of the img to database -->
   <button id="right-btn"><i class="arrow"></i><button>
 </div>
 
-    </div> <!-- row -->
   </div><!-- wrapper -->
   <footer class='main-footer'>
     <span>&copy;2019 Lukas Komprs</span>

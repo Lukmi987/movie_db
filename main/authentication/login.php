@@ -13,7 +13,7 @@ require_once __DIR__ . '/requireFiles.php';
       rel = "stylesheet">
    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-  
+
   <head>
 <body id='movies-data' data-logged='<?php echo isAuthenticated();  ?>'> <!--https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
   <!-- Header -->
@@ -44,8 +44,7 @@ require_once __DIR__ . '/requireFiles.php';
   </div> <!-- /Navbar -->
 
     <div class='wrapper'>
-      <div class='row'>
-          <div class="well col-sm-6 col-sm-offset-3">
+          <div class="forms well col-sm-6 col-sm-offset-3">
               <form class="form-signin" method="post" action="doLogin.php">
                   <h2 class="form-signin-heading">Please sign in</h2>
                   <?php echo display_errors(); ?>
@@ -58,7 +57,6 @@ require_once __DIR__ . '/requireFiles.php';
                   <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
               </form>
           </div>
-      </div> <!-- /row -->
   </div> <!-- wrapper -->
   <footer class='main-footer'>
     <span>&copy;2019 Lukas Komprs</span>

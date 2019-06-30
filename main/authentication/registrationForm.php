@@ -41,9 +41,8 @@ require_once __DIR__ . '/requireFiles.php';
    </div> <!-- /Navbar -->
 
      <div class='wrapper'>
-       <div class='row'>
-         <div class="well col-sm-6 col-sm-offset-3">
-          <form class="form-signin" method="post" action="doRegister.php">
+         <div class="forms well col-sm-6 col-sm-offset-3">
+          <form class="form-signin " method="post" action="doRegister.php">
               <h2 class="form-signin-heading">Registration</h2>
               <?php print display_errors(); ?>
               <label for="inputEmail" class="sr-only">Email address</label>
@@ -58,7 +57,6 @@ require_once __DIR__ . '/requireFiles.php';
               <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
           </form>
         </div>
-    </div> <!-- /row -->
   </div> <!-- wrapper -->
 <footer class='main-footer'>
   <span>&copy;2019 Lukas Komprs</span>

@@ -43,8 +43,8 @@ requireAuth();
   </div> <!-- /Navbar -->
 
     <div class='wrapper'>
-      <div class='row'>
-          <div class="well col-sm-6 col-sm-offset-3">
+
+          <div class=" forms well col-sm-8 col-sm-offset-3 col-lg-5">
             <form class="form-signin" method="post" action="changePassword.php">
                 <h2 class="form-signin-heading">My account</h2>
                 <h4>Change Password</h4>
@@ -62,7 +62,6 @@ requireAuth();
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Change password</button>
             </form>
           </div>
-      </div> <!-- /row -->
     </div> <!-- wrapper -->
 <footer class='main-footer'>
 <span>&copy;2019 Lukas Komprs</span>
